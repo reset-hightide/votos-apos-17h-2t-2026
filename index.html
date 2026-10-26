@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Votos após as 17h — 2º turno 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: aviso de versão, placar nacional, linha do tempo, gráficos, comparação com o 1º turno, seção pendente por UF */
+:root {
+  --bg: #f4f6f9; --surface: #ffffff; --fg: #1a1f29; --muted: #5c6575; --line: #dce1e9;
+  --good: #2e7a4d; --good-bg: #e3f1e8; --bad: #b0412f; --bad-bg: #f8e4e0; --neutral-bg: #eef1f5;
+  --warn: #8a5a00; --warn-bg: #fdf1d6; --accent: #2d5ea8; --accent2: #c0392b;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
+  --f-data: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --surface: #1a1e26; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2c323d;
+    --good: #6cc792; --good-bg: #1d3327; --bad: #ef8a78; --bad-bg: #3a221e; --neutral-bg: #232832;
+    --warn: #f0c46a; --warn-bg: #3a2f14; --accent: #7ea8dc; --accent2: #ef8a78; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--f-body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 32px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; font-weight: 700; }
+h3 { font-size: 0.98rem; font-weight: 700; }
+header { display: grid; gap: 12px; }
+.lede { max-width: 68ch; color: var(--muted); margin: 0; }
+.eyebrow { font: 600 0.75rem var(--f-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+a { color: var(--accent); }
+.notice { background: var(--warn-bg); color: var(--fg); border: 1px solid var(--warn); border-left-width: 6px; border-radius: 8px; padding: 12px 14px; display: grid; gap: 4px; }
+.notice b { font: 700 0.95rem var(--f-display); color: var(--warn); }
+.notice p { margin: 0; font-size: 0.9rem; }
+nav { display: flex; flex-wrap: wrap; gap: 8px; }
+nav a { font: 600 0.8rem var(--f-body); color: var(--fg); text-decoration: none; border: 1px solid var(--line); background: var(--surface); padding: 5px 11px; border-radius: 999px; }
+nav a:hover, nav a:focus-visible { border-color: var(--muted); outline: none; }
+section.group { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; scroll-margin-top: 16px; }
+.group-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.group-head .num { font: 600 0.8rem var(--f-data); color: var(--muted); }
+.group-head p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.placar { display: flex; flex-wrap: wrap; gap: 10px; }
+.placar div { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 10px 14px; display: grid; gap: 2px; min-width: 170px; flex: 1 1 170px; }
+.placar b { font: 800 1.6rem var(--f-display); }
+.placar span { font-size: 0.8rem; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 14px 10px; display: grid; gap: 6px; min-width: 0; align-content: start; }
+.card .sub { font-size: 0.8rem; color: var(--muted); margin: 0; }
+.card .canvas { position: relative; height: 240px; }
+.card .src { font-size: 0.72rem; color: var(--muted); margin: 0; }
+.info { background: var(--neutral-bg); border-left: 3px solid var(--line); border-radius: 0 6px 6px 0; padding: 8px 10px 9px; display: grid; gap: 4px; margin-top: 4px; }
+.info-k { font: 600 0.62rem var(--f-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.info p { margin: 0; font-size: 0.82rem; line-height: 1.45; }
+.tag { font: 600 0.65rem var(--f-data); letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; background: var(--neutral-bg); color: var(--muted); margin-left: 6px; vertical-align: 2px; }
+.tag.warn { background: var(--warn-bg); color: var(--warn); }
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; font-size: 0.86rem; width: 100%; min-width: 360px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; vertical-align: top; }
+th:first-child, td:first-child { text-align: left; }
+thead th { font: 700 0.78rem var(--f-display); background: var(--surface); }
+td.v { font-family: var(--f-data); font-size: 0.82rem; white-space: nowrap; }
+td small { display: block; font-size: 0.7rem; color: var(--muted); font-weight: 400; white-space: normal; }
+.tl { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.tl li { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.tl li:last-child { border-bottom: 0; }
+.tl time { font: 600 0.85rem var(--f-data); color: var(--accent); }
+.tl p { margin: 0; font-size: 0.9rem; }
+.tl small { color: var(--muted); }
+.pending { background: var(--surface); border: 2px dashed var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 10px; }
+.pending p { margin: 0; font-size: 0.9rem; }
+.pending ol { margin: 0; padding-left: 20px; font-size: 0.9rem; display: grid; gap: 4px; }
+.pending code { font-family: var(--f-data); font-size: 0.8rem; background: var(--neutral-bg); padding: 1px 5px; border-radius: 4px; }
+.skeleton { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 8px; }
+.skeleton div { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; background: var(--neutral-bg); display: grid; gap: 2px; }
+.skeleton b { font: 700 0.85rem var(--f-display); }
+.skeleton span { font: 600 0.8rem var(--f-data); color: var(--muted); }
+footer { font-size: 0.8rem; color: var(--muted); display: grid; gap: 6px; }
+footer ul { margin: 0; padding-left: 18px; }
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  .wrap { gap: 32px; padding-block: 20px 48px; }
+  .card .canvas { height: 210px; }
+  .placar b { font-size: 1.3rem; }
+  .tl li { grid-template-columns: 52px 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Eleições 2026 · 2º turno · 25/10/2026</span>
+  <h1>Quantos votos foram dados depois das 17h?</h1>
+  <p class="lede">O horário de votação foi prorrogado até as 19h por decisão do STF, a pedido das campanhas de Lula e de Flávio Bolsonaro, depois de relatos de falta de ônibus e de chuva. Esta página reúne o que já foi apurado a partir dos dados do TSE e mostra o que ainda não dá para saber.</p>
+  <nav>
+    <a href="#placar">Placar</a><a href="#tempo">Minuto a minuto</a><a href="#turnos">1º × 2º turno</a><a href="#escolas">Onde votaram</a><a href="#linha">O que aconteceu</a><a href="#uf">Por estado e município</a><a href="#fontes">Fontes</a>
+  </nav>
+  <div class="notice" role="note">
+    <b>Versão 1: só dados nacionais</b>
+    <p>O recorte por estado e município ainda não existe. Ele depende dos logs de urna do 2º turno, que o TSE ainda não publicou (os arquivos do 1º turno estão no portal de dados abertos; os do 2º turno retornavam erro 404 em 26/10/2026). Vou lançar uma segunda versão com o detalhamento por UF e município assim que os logs forem disponibilizados.</p>
+  </div>
+</header>
+
+<section class="group" id="placar">
+  <div class="group-head"><span class="num">01</span><h2>Placar nacional</h2><p>Dois levantamentos independentes, com métodos diferentes</p></div>
+  <div class="placar">
+    <div><b>34.330</b><span>votos após 17h<br>(setup.news / CNN, dados do TSE)</span></div>
+    <div><b>35.521</b><span>votos após 17h<br>(análise de logs de 497.897 seções)</span></div>
+    <div><b>0,027%</b><span>dos 127.854.658 votos totais (base 34.330)</span></div>
+    <div><b>~0,8%</b><span>da diferença final de ~4,4 milhões de votos</span></div>
+    <div><b>19h06</b><span>horário do último voto registrado</span></div>
+  </div>
+  <div class="info">
+    <span class="info-k">Como ler</span>
+    <p>A diferença de 1.191 votos (3,5%) entre os dois números vem da metodologia. Segundo a segunda apuração, 30.866 votos estavam em seções com boletim conferido e totalizado e 4.655 em seções ainda pendentes de validação. Os dois cabem na mesma ordem de grandeza: algo em torno de 35 mil votos, menos de 1% da margem entre Lula (51,79%) e Flávio Bolsonaro (48,21%).</p>
+    <p>Não é possível saber em quem esses votos foram dados: o sigilo do voto impede ligar horário e escolha.</p>
+  </div>
+</section>
+
+<section class="group" id="tempo">
+  <div class="group-head"><span class="num">02</span><h2>Minuto a minuto</h2><p>Quase tudo aconteceu nos primeiros cinco minutos</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>Votos por faixa de horário</h3>
+      <p class="sub">Votos registrados em cada faixa (base 34.330)</p>
+      <div class="canvas"><canvas id="cFaixas" role="img" aria-label="Votos por faixa de horário após as 17h"></canvas></div>
+      <p class="src">Fonte: setup.news / CNN Brasil, com dados do TSE.</p>
+    </div>
+    <div class="card">
+      <h3>Ritmo médio por minuto em cada faixa</h3>
+      <p class="sub">Votos por minuto, média de cada faixa</p>
+      <div class="canvas"><canvas id="cRitmo" role="img" aria-label="Ritmo médio de votos por minuto"></canvas></div>
+      <div class="info"><span class="info-k">Cálculo</span><p>13.961 em 1 min · 15.040 em 4 min (3.760/min) · 5.329 em 121 min (44/min). Médias derivadas das faixas publicadas, não são medições minuto a minuto.</p></div>
+    </div>
+  </div>
+  <div class="info">
+    <span class="info-k">Por que o pico logo após as 17h?</span>
+    <p>A decisão de prorrogar saiu às 16h32, mas só chegou ao TRE-SP às 17h18, quando cerca de 80% das seções paulistas já tinham encerrado. O pico imediatamente depois das 17h é compatível com eleitores que já estavam no local, e não com uma onda de gente voltando para votar. A própria CNN faz essa ressalva.</p>
+  </div>
+</section>
+
+<section class="group" id="turnos">
+  <div class="group-head"><span class="num">03</span><h2>1º turno × 2º turno</h2><p>Dois fenômenos diferentes, não comparáveis diretamente</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>Votos depois das 17h, 18h e 19h no 1º turno <span class="tag">escala log</span></h3>
+      <p class="sub">Escala logarítmica: o 1º turno é cerca de 100 vezes maior que o 2º</p>
+      <div class="canvas"><canvas id="cTurnos" role="img" aria-label="Votos após 17h, 18h e 19h no primeiro turno"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="tablebox"><table>
+        <thead><tr><th>Corte</th><th>1º turno</th><th>2º turno</th></tr></thead>
+        <tbody>
+          <tr><td>Após 17h</td><td class="v">3.724.999</td><td class="v">34.330</td></tr>
+          <tr><td>Após 18h</td><td class="v">1.993</td><td class="v">n/d<small>não publicado</small></td></tr>
+          <tr><td>Após 19h</td><td class="v">11</td><td class="v">n/d<small>último voto às 19h06</small></td></tr>
+          <tr><td>Prorrogação formal</td><td class="v">não</td><td class="v">sim, até 19h</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <div class="info">
+    <span class="info-k">Cuidado na comparação</span>
+    <p>No 1º turno não houve prorrogação: os 3,7 milhões são eleitores que já estavam na fila às 17h e receberam senha, como prevê o Código Eleitoral. No 2º turno a prorrogação valeu só para seções ainda abertas, e urnas já encerradas não foram reabertas. Por isso um número muito menor no 2º turno não quer dizer, por si só, que menos gente tenha votado tarde: as regras e as seções abertas eram diferentes. A CNN também não detalha se os dois turnos foram medidos com o mesmo critério.</p>
+  </div>
+</section>
+
+<section class="group" id="escolas">
+  <div class="group-head"><span class="num">04</span><h2>Onde votaram: as 30 escolas com mais votos após as 17h</h2><p>Único recorte geográfico publicado até agora</p></div>
+  <div class="grid">
+    <div class="card">
+      <h3>Escolas do top 30 por cidade</h3>
+      <p class="sub">Quantas das 30 escolas com mais votos pós-17h ficam em cada cidade</p>
+      <div class="canvas"><canvas id="cEscolas" role="img" aria-label="Escolas do top 30 por cidade"></canvas></div>
+      <p class="src">Fonte: setup.news / CNN Brasil. A lista nominal e as contagens por escola não foram divulgadas.</p>
+    </div>
+    <div class="card">
+      <div class="tablebox"><table>
+        <thead><tr><th>Cidade</th><th>Escolas no top 30</th></tr></thead>
+        <tbody>
+          <tr><td>São Paulo (SP)</td><td class="v">21</td></tr>
+          <tr><td>Salvador (BA)</td><td class="v">5</td></tr>
+          <tr><td>Ouro Branco (AL)</td><td class="v">1</td></tr>
+          <tr><td>Rio de Janeiro (RJ)</td><td class="v">1</td></tr>
+          <tr><td>São Miguel das Matas (BA)</td><td class="v">1</td></tr>
+          <tr><td>Água Preta (PE)</td><td class="v">1</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <div class="info">
+    <span class="info-k">Limite</span>
+    <p>O ranking mostra onde ficam as escolas com mais votos tardios, mas não os totais por cidade ou estado. Não dá para afirmar que São Paulo e Salvador concentram a maior parte dos ~35 mil votos: isso só a versão com os logs completos vai mostrar. A presença de SP e Salvador é coerente com os pedidos de prorrogação (Bahia pela campanha de Lula; SP, PR e SC pela de Flávio Bolsonaro), mas é coincidência de contexto, não relação demonstrada.</p>
+  </div>
+</section>
+
+<section class="group" id="linha">
+  <div class="group-head"><span class="num">05</span><h2>O que aconteceu em 25/10</h2><p>Horário de Brasília</p></div>
+  <ul class="tl">
+    <li><time>tarde</time><p>A coligação de Lula aciona a Justiça por transporte público insuficiente em Salvador, Feira de Santana e Lauro de Freitas (BA). A campanha de Flávio Bolsonaro pede prorrogação em 17 municípios de SP, PR e SC por chuva, alagamentos e vias interditadas. <small>Há ainda um relato, de fonte única e não confirmado, de ordem de prisão do secretário de mobilidade de Salvador por corte de mais de 50% da frota de ônibus.</small></p></li>
+    <li><time>16h32</time><p>O ministro Cristiano Zanin (STF) determina a prorrogação por duas horas, até as 19h, em todas as seções do país, embora o pedido tratasse de três cidades da Bahia.</p></li>
+    <li><time>17h00</time><p>Horário normal de encerramento. Quem estava na fila segue com direito a votar, por senha.</p></li>
+    <li><time>17h18</time><p>O TRE-SP recebe a comunicação da decisão, com cerca de 80% das seções paulistas já encerradas. Seções fechadas não foram reabertas. <small>Segundo a Rádio Senado, a extensão não foi aplicada no Distrito Federal; o motivo não foi confirmado.</small></p></li>
+    <li><time>—</time><p>O TSE interrompe temporariamente a divulgação dos resultados, com cerca de 0,25% das seções apuradas, e retoma depois do novo horário.</p></li>
+    <li><time>19h06</time><p>Último voto registrado.</p></li>
+    <li><time>depois</time><p>Lula é eleito com 51,79% contra 48,21%, diferença de ~4,4 milhões de votos (2,1 milhões em 2022). Flávio Bolsonaro contesta a prorrogação e anuncia pedido de anulação da eleição; o desfecho desse pedido não consta nas fontes consultadas.</p></li>
+  </ul>
+</section>
+
+<section class="group" id="uf">
+  <div class="group-head"><span class="num">06</span><h2>Por estado e município <span class="tag warn">pendente · versão 2</span></h2><p>Ainda não é possível calcular</p></div>
+  <div class="pending">
+    <h3>Os logs de urna do 2º turno ainda não foram publicados pelo TSE</h3>
+    <p>O horário de cada voto fica nos logs de cada urna. Em 26/10/2026 o portal de dados abertos do TSE só trazia os arquivos de transmissão do 1º turno; o endereço equivalente do 2º turno devolvia 404. Até lá, qualquer número por UF ou município seria estimativa, e esta página não estima.</p>
+    <h3>O que a versão 2 pretende fazer</h3>
+    <ol>
+      <li>Baixar os arquivos de transmissão do 2º turno (<code>bu_imgbu_logjez_rdv_vscmr_2026_2t_UF.zip</code>) de cada UF.</li>
+      <li>Ler os logs <code>logjez</code> de cada seção e contar os votos registrados depois das 17h.</li>
+      <li>Agregar por UF, município, zona e seção, e cruzar com comparecimento e boletim de urna.</li>
+      <li>Atualizar esta página com ranking por estado e município, mapa e detalhes por seção.</li>
+    </ol>
+    <div class="skeleton" aria-hidden="true">
+      <div><b>São Paulo</b><span>a calcular</span></div><div><b>Bahia</b><span>a calcular</span></div><div><b>Paraná</b><span>a calcular</span></div><div><b>Santa Catarina</b><span>a calcular</span></div><div><b>Distrito Federal</b><span>a calcular</span></div><div><b>…demais UFs</b><span>a calcular</span></div>
+    </div>
+  </div>
+</section>
+
+<footer id="fontes">
+  <h3>Fontes e limites</h3>
+  <ul>
+    <li><a href="https://www.cnnbrasil.com.br/eleicoes/dados-tse-votacao-apos-prorrogacao/">CNN Brasil / setup.news: 34 mil eleitores votaram após as 17h</a> (34.330; faixas de horário; 1º turno).</li>
+    <li><a href="https://www.mixvale.com.br/2026/10/26/eleicao-presidencial-de-2026-dados-do-tse-mostram-que-35-521-votos-foram-registrados-apos-as-17h-no-2o-turno/">Mixvale: 35.521 votos registrados após as 17h</a> (logs de 497.897 seções).</li>
+    <li><a href="https://simnoticias.com.br/cnn-brasil/veja-quais-escolas-tiveram-mais-votos-apos-as-17h-no-2o-turno/">Sim Notícias / CNN: escolas com mais votos após as 17h</a>.</li>
+    <li><a href="https://www.poder360.com.br/poder-eleicoes-2026/zanin-prorroga-votacao-do-2o-turno-ate-19h/">Poder360</a>, <a href="https://www.cartacapital.com.br/politica/lula-e-flavio-bolsonaro-pedem-ao-tse-prorrogacao-da-votacao-ate-as-19h/">CartaCapital</a>, <a href="https://timesbrasil.com.br/brasil/decisao-2026-tse-pausa-apuracao-do-segundo-turno-apos-prorrogacao-da-votacao/">Times Brasil</a>, <a href="https://www12.senado.leg.br/radio/1/noticia/2026/10/26/prorrogacao-do-horario-de-votacao-marca-o-segundo-turno-de-2026">Rádio Senado</a>: contexto da decisão e da apuração.</li>
+    <li><a href="https://dadosabertos.tse.jus.br/dataset/resultados-2026-arquivos-transmitidos-para-totalizacao">TSE, dados abertos: arquivos transmitidos para totalização</a> (base da versão 2).</li>
+  </ul>
+  <p>Os números vêm de reportagens que usam dados do TSE; nada aqui foi recalculado a partir dos logs originais. Os dois totais divergem por metodologia e podem ser revisados. Dados de 26/10/2026.</p>
+</footer>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+(function () {
+  var charts = [];
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  var nf = new Intl.NumberFormat("pt-BR");
+  function bar(id, labels, data, o) {
+    var horiz = !!o.horizontal, vAxis = horiz ? "x" : "y";
+    var scales = {
+      x: { grid: { color: css("--line") }, ticks: { color: css("--muted") } },
+      y: { grid: { color: css("--line") }, ticks: { color: css("--muted") } }
+    };
+    scales[vAxis].type = o.log ? "logarithmic" : "linear";
+    if (!o.log) scales[vAxis].beginAtZero = true;
+    charts.push(new Chart(document.getElementById(id), {
+      type: "bar",
+      data: { labels: labels, datasets: [{ data: data, backgroundColor: o.colors, borderRadius: 4 }] },
+      options: {
+        indexAxis: horiz ? "y" : "x", responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (t) { return nf.format(t.parsed[vAxis]) + (o.unit || ""); } } } },
+        scales: scales
+      }
+    }));
+  }
+  function draw() {
+    charts.forEach(function (c) { c.destroy(); }); charts = [];
+    var a = css("--accent"), m = css("--muted");
+    bar("cFaixas", ["17h00–17h01", "17h01–17h05", "17h05–19h06"], [13961, 15040, 5329], { unit: " votos", colors: [a, a, m] });
+    bar("cRitmo", ["17h00–17h01", "17h01–17h05", "17h05–19h06"], [13961, 3760, 44], { unit: " votos/min", colors: css("--accent2") });
+    bar("cTurnos", ["Após 17h", "Após 18h", "Após 19h"], [3724999, 1993, 11], { unit: " votos (1º turno)", log: true, colors: a });
+    bar("cEscolas", ["São Paulo (SP)", "Salvador (BA)", "Ouro Branco (AL)", "Rio de Janeiro (RJ)", "S. Miguel das Matas (BA)", "Água Preta (PE)"], [21, 5, 1, 1, 1, 1], { horizontal: true, unit: " escolas", colors: a });
+  }
+  draw();
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+})();
+</script>
+</body>
+</html>
