@@ -19,7 +19,7 @@ Em 25/10/2026, o STF prorrogou a votação do 2º turno até as 19h, depois de p
 
 - Resumo em números e linha do tempo do dia
 - Votos por faixa de horário e ritmo por minuto
-- Comparação com o 1º turno (com ressalvas)
+- Quadro "de cada 100 pessoas que votaram tarde, quando votaram"
 - Perguntas rápidas
 - Fontes de cada número
 

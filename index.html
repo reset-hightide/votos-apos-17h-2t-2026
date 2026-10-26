@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: aviso de versão, placar nacional, linha do tempo, gráficos, comparação com o 1º turno, seção pendente por UF */
+/* Layout: aviso de versão, placar nacional, linha do tempo, gráficos, quadro de 100 quadrados, seção pendente por UF */
 :root {
   --bg: #f4f6f9; --surface: #ffffff; --fg: #1a1f29; --muted: #5c6575; --line: #dce1e9;
   --good: #2e7a4d; --good-bg: #e3f1e8; --bad: #b0412f; --bad-bg: #f8e4e0; --neutral-bg: #eef1f5;
@@ -81,6 +81,16 @@ td small { display: block; font-size: 0.7rem; color: var(--muted); font-weight: 
 .skeleton div { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; background: var(--neutral-bg); display: grid; gap: 2px; }
 .skeleton b { font: 700 0.85rem var(--f-display); }
 .skeleton span { font: 600 0.8rem var(--f-data); color: var(--muted); }
+.waffle-box { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 24px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+.waffle { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+.waffle i { aspect-ratio: 1; border-radius: 3px; display: block; }
+.c1 { background: var(--accent2); } .c2 { background: var(--accent); } .c3 { background: var(--muted); opacity: 0.55; }
+.wlegend { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.wlegend li { display: grid; grid-template-columns: 18px 1fr; gap: 12px; align-items: start; }
+.wlegend li > i { width: 18px; height: 18px; border-radius: 4px; margin-top: 6px; }
+.wlegend b { display: block; font: 800 1.6rem var(--f-display); line-height: 1.1; }
+.wlegend span { font-size: 0.9rem; color: var(--muted); }
+.wlegend em { font: 600 0.78rem var(--f-data); font-style: normal; color: var(--fg); }
 .hero { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: grid; gap: 20px; }
 .hero-top { display: grid; grid-template-columns: auto 1fr; gap: 8px 24px; align-items: center; }
 .hero-num { font: 800 clamp(3rem, 9vw, 5.5rem)/1 var(--f-display); color: var(--accent); letter-spacing: -0.03em; }
@@ -119,6 +129,7 @@ footer ul { margin: 0; padding-left: 18px; }
   .placar b { font-size: 1.3rem; }
   .tl li { grid-template-columns: 52px 1fr; }
   .hero { padding: 16px; }
+  .waffle-box { grid-template-columns: 1fr; padding: 14px; }
   .hero-top { grid-template-columns: 1fr; }
   .strip .pt span { font-size: 0.62rem; }
   .strip .pt span small { display: none; }
@@ -156,7 +167,7 @@ footer ul { margin: 0; padding-left: 18px; }
     </div>
   </div>
   <nav>
-    <a href="#placar">Placar</a><a href="#tempo">Minuto a minuto</a><a href="#turnos">1º × 2º turno</a><a href="#escolas">Onde votaram</a><a href="#linha">O que aconteceu</a><a href="#uf">Por estado e município</a><a href="#faq">Perguntas</a><a href="#fontes">Fontes</a>
+    <a href="#placar">Placar</a><a href="#tempo">Minuto a minuto</a><a href="#quando">Quando votaram</a><a href="#escolas">Onde votaram</a><a href="#linha">O que aconteceu</a><a href="#uf">Por estado e município</a><a href="#faq">Perguntas</a><a href="#fontes">Fontes</a>
   </nav>
   <div class="notice" role="note">
     <b>Versão 1: só dados nacionais</b>
@@ -202,29 +213,19 @@ footer ul { margin: 0; padding-left: 18px; }
   </div>
 </section>
 
-<section class="group" id="turnos">
-  <div class="group-head"><span class="num">03</span><h2>1º turno × 2º turno</h2><p>Dois fenômenos diferentes, não comparáveis diretamente</p></div>
-  <div class="grid">
-    <div class="card">
-      <h3>Votos depois das 17h, 18h e 19h no 1º turno <span class="tag">escala log</span></h3>
-      <p class="sub">Escala logarítmica: o 1º turno é cerca de 100 vezes maior que o 2º</p>
-      <div class="canvas"><canvas id="cTurnos" role="img" aria-label="Votos após 17h, 18h e 19h no primeiro turno"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="tablebox"><table>
-        <thead><tr><th>Corte</th><th>1º turno</th><th>2º turno</th></tr></thead>
-        <tbody>
-          <tr><td>Após 17h</td><td class="v">3.724.999</td><td class="v">34.330</td></tr>
-          <tr><td>Após 18h</td><td class="v">1.993</td><td class="v">n/d<small>não publicado</small></td></tr>
-          <tr><td>Após 19h</td><td class="v">11</td><td class="v">n/d<small>último voto às 19h06</small></td></tr>
-          <tr><td>Prorrogação formal</td><td class="v">não</td><td class="v">sim, até 19h</td></tr>
-        </tbody>
-      </table></div>
-    </div>
+<section class="group" id="quando">
+  <div class="group-head"><span class="num">03</span><h2>Quando votaram</h2><p>De cada 100 pessoas que votaram depois das 17h</p></div>
+  <div class="waffle-box">
+    <div class="waffle" role="img" aria-label="De cada 100 votos após as 17h, cerca de 41 foram no primeiro minuto, 44 até as 17h05 e 15 depois disso"><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c1"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c2"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i><i class="c3"></i></div>
+    <ul class="wlegend">
+      <li><i class="c1"></i><div><b>41 em 100</b><span>no primeiro minuto (17h00 às 17h01)<br><em>13.961 votos · 40,7%</em></span></div></li>
+      <li><i class="c2"></i><div><b>44 em 100</b><span>entre 17h01 e 17h05<br><em>15.040 votos · 43,8%</em></span></div></li>
+      <li><i class="c3"></i><div><b>15 em 100</b><span>de 17h05 até o último voto, às 19h06<br><em>5.329 votos · 15,5%</em></span></div></li>
+    </ul>
   </div>
   <div class="info">
-    <span class="info-k">Cuidado na comparação</span>
-    <p>No 1º turno não houve prorrogação: os 3,7 milhões são eleitores que já estavam na fila às 17h e receberam senha, como prevê o Código Eleitoral. No 2º turno a prorrogação valeu só para seções ainda abertas, e urnas já encerradas não foram reabertas. Por isso um número muito menor no 2º turno não quer dizer, por si só, que menos gente tenha votado tarde: as regras e as seções abertas eram diferentes. A CNN também não detalha se os dois turnos foram medidos com o mesmo critério.</p>
+    <span class="info-k">Como ler</span>
+    <p>Cada quadrado vale cerca de 1% dos 34.330 votos (arredondado). Quase tudo aconteceu nos primeiros cinco minutos; as duas horas seguintes somam pouco. Os percentuais exatos estão ao lado.</p>
   </div>
 </section>
 
@@ -295,7 +296,6 @@ footer ul { margin: 0; padding-left: 18px; }
     <details><summary>Em quem essas pessoas votaram?</summary><p>Não dá para saber. O sigilo do voto impede ligar o horário de um voto à escolha do eleitor.</p></details>
     <details><summary>Por que há dois totais (34.330 e 35.521)?</summary><p>São levantamentos com métodos diferentes. O de <b>35.521</b> analisou os logs de 497.897 seções e inclui seções ainda pendentes de validação. O de <b>34.330</b> vem do setup.news, parceiro da CNN. A diferença é de 3,5%.</p></details>
     <details><summary>Por que quase todos votaram logo depois das 17h?</summary><p>A decisão de prorrogar só chegou ao TRE-SP às 17h18, quando cerca de 80% das seções paulistas já tinham fechado. O pico logo depois das 17h é compatível com quem já estava no local, não com uma onda de pessoas voltando para votar.</p></details>
-    <details><summary>Por que o 1º turno tem 3,7 milhões após as 17h e o 2º só ~35 mil?</summary><p>No 1º turno, quem estava na fila às 17h recebeu senha e votou depois do horário. No 2º, a prorrogação só valeu para seções ainda abertas e as urnas já fechadas não foram reabertas. As regras e as seções abertas eram diferentes, então os números não são diretamente comparáveis.</p></details>
     <details><summary>Quando saem os dados por estado e município?</summary><p>Depois que o TSE publicar os logs de urna do 2º turno. Eles ainda não estavam disponíveis em 26/10/2026. A versão 2 desta página usará esses logs.</p></details>
   </div>
 </section>
@@ -303,7 +303,7 @@ footer ul { margin: 0; padding-left: 18px; }
 <footer id="fontes">
   <h3>Fontes e limites</h3>
   <ul>
-    <li><a href="https://www.cnnbrasil.com.br/eleicoes/dados-tse-votacao-apos-prorrogacao/">CNN Brasil / setup.news: 34 mil eleitores votaram após as 17h</a> (34.330; faixas de horário; 1º turno).</li>
+    <li><a href="https://www.cnnbrasil.com.br/eleicoes/dados-tse-votacao-apos-prorrogacao/">CNN Brasil / setup.news: 34 mil eleitores votaram após as 17h</a> (34.330 e faixas de horário).</li>
     <li><a href="https://www.mixvale.com.br/2026/10/26/eleicao-presidencial-de-2026-dados-do-tse-mostram-que-35-521-votos-foram-registrados-apos-as-17h-no-2o-turno/">Mixvale: 35.521 votos registrados após as 17h</a> (logs de 497.897 seções).</li>
     <li><a href="https://simnoticias.com.br/cnn-brasil/veja-quais-escolas-tiveram-mais-votos-apos-as-17h-no-2o-turno/">Sim Notícias / CNN: escolas com mais votos após as 17h</a>.</li>
     <li><a href="https://www.poder360.com.br/poder-eleicoes-2026/zanin-prorroga-votacao-do-2o-turno-ate-19h/">Poder360</a>, <a href="https://www.cartacapital.com.br/politica/lula-e-flavio-bolsonaro-pedem-ao-tse-prorrogacao-da-votacao-ate-as-19h/">CartaCapital</a>, <a href="https://timesbrasil.com.br/brasil/decisao-2026-tse-pausa-apuracao-do-segundo-turno-apos-prorrogacao-da-votacao/">Times Brasil</a>, <a href="https://www12.senado.leg.br/radio/1/noticia/2026/10/26/prorrogacao-do-horario-de-votacao-marca-o-segundo-turno-de-2026">Rádio Senado</a>: contexto da decisão e da apuração.</li>
@@ -342,7 +342,6 @@ footer ul { margin: 0; padding-left: 18px; }
     var a = css("--accent"), m = css("--muted");
     bar("cFaixas", ["17h00–17h01", "17h01–17h05", "17h05–19h06"], [13961, 15040, 5329], { unit: " votos", colors: [a, a, m] });
     bar("cRitmo", ["17h00–17h01", "17h01–17h05", "17h05–19h06"], [13961, 3760, 44], { unit: " votos/min", colors: css("--accent2") });
-    bar("cTurnos", ["Após 17h", "Após 18h", "Após 19h"], [3724999, 1993, 11], { unit: " votos (1º turno)", log: true, colors: a });
     bar("cEscolas", ["São Paulo (SP)", "Salvador (BA)", "Ouro Branco (AL)", "Rio de Janeiro (RJ)", "S. Miguel das Matas (BA)", "Água Preta (PE)"], [21, 5, 1, 1, 1, 1], { horizontal: true, unit: " escolas", colors: a });
   }
   draw();
