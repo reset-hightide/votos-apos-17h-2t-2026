@@ -58,7 +58,29 @@ section { display: grid; gap: 18px; scroll-margin-top: 16px; }
 .plain { max-width: 66ch; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 8px; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-.stat b { font: 800 clamp(2rem, 6vw, 2.8rem)/1 var(--f-display); }
+.stat b { font: 800 clamp(1.8rem, 5vw, 2.4rem)/1 var(--f-display); white-space: nowrap; }
+.duel { gap: 14px; padding: 22px; }
+.duel-row { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+.duel-side { display: grid; gap: 2px; }
+.duel-side.r { text-align: right; }
+.duel-side b { font: 800 clamp(1.5rem, 4.6vw, 2.3rem)/1.1 var(--f-display); }
+.duel-side .pct { font: 800 clamp(2.4rem, 8vw, 4rem)/1 var(--f-display); letter-spacing: -0.02em; }
+.split { display: flex; gap: 3px; height: 18px; border-radius: 9px; overflow: hidden; }
+.split i { display: block; height: 100%; }
+/* feedback */
+.fbk form { display: grid; gap: 12px; max-width: 720px; }
+.fbk label { display: grid; gap: 6px; font: 600 0.75rem var(--f-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.fbk input, .fbk select, .fbk textarea { font: 400 1rem var(--f-body); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; width: 100%; letter-spacing: 0; text-transform: none; }
+.fbk textarea { min-height: 120px; resize: vertical; }
+.fbk input:focus-visible, .fbk select:focus-visible, .fbk textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.fbk .fbrow { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.fbk .fbbtns { display: flex; flex-wrap: wrap; gap: 12px; }
+.fbk button { cursor: pointer; font: 700 1rem var(--f-display); display: inline-flex; align-items: center; padding: 13px 20px; border-radius: 12px; border: 1px solid var(--line); color: var(--fg); background: var(--surface); }
+.fbk button.primary { background: var(--accent); color: var(--onacc); border: 0; }
+.fbk button:disabled { opacity: .5; cursor: default; }
+.fbk .hp { position: absolute; left: -9999px; }
+.fbk .fbmsg { min-height: 1.4em; color: var(--accent); margin: 0; font-size: 0.95rem; }
+.fbk .fbmsg a { color: var(--accent); }
 .stat span { color: var(--muted); font-size: 0.95rem; }
 .answer { background: var(--accent); color: var(--onacc); border-radius: 14px; padding: 20px 22px; font: 700 1.2rem/1.35 var(--f-display); }
 .note { background: var(--neutral); border-left: 4px solid var(--line); border-radius: 0 10px 10px 0; padding: 12px 16px; font-size: 0.95rem; display: grid; gap: 4px; }
@@ -158,9 +180,17 @@ details p b { color: var(--fg); }
 <section id="resposta">
   <div class="head"><span class="num">00</span><h2>A resposta curta</h2></div>
   <div class="answer">Pelos números publicados, não. Os votos tardios foram uma parcela minúscula do total.</div>
+  <div class="card duel" role="group" aria-label="Resultado do 2º turno">
+    <div class="duel-row">
+      <div class="duel-side"><span class="k">Vencedor</span><b class="lula">Lula</b><span class="pct lula">51,79%</span></div>
+      <div class="duel-side r"><span class="k">2º colocado</span><b class="flavio">Flávio Bolsonaro</b><span class="pct flavio">48,21%</span></div>
+    </div>
+    <div class="split" aria-hidden="true"><i style="width:51.79%;background:var(--lula)"></i><i style="width:48.21%;background:var(--flavio)"></i></div>
+    <span class="src">Resultado do 2º turno · diferença de cerca de 4,4 milhões de votos</span>
+  </div>
   <div class="cards">
     <div class="card stat"><b class="acc">~35 mil</b><span>pessoas votaram depois das 17h, cerca de 1 a cada 3.700 votos</span></div>
-    <div class="card stat"><b class="acc">~4,4 milhões</b><span>foi a diferença entre os candidatos (<b class="lula">Lula</b> 51,79% × <b class="flavio">Flávio Bolsonaro</b> 48,21%)</span></div>
+    <div class="card stat"><b class="acc">~4,4 milhões</b><span>de votos foi a diferença entre os dois candidatos</span></div>
     <div class="card stat"><b class="red">0,8%</b><span>é quanto os votos tardios representam dessa diferença</span></div>
   </div>
   <p class="plain">Em palavras simples: mesmo que todos esses votos fossem anulados, quem ganhou continuaria ganhando por mais de 4 milhões de votos. Mas isso não responde a tudo. Abaixo, o que sabemos, o que não sabemos e por quê.</p>
@@ -320,8 +350,27 @@ details p b { color: var(--fg); }
   </div>
 </section>
 
+<section id="feedback" class="fbk">
+  <div class="head"><span class="num">10</span><h2>Sugestões e feedback</h2></div>
+  <p class="plain">Achou um erro, tem uma ideia ou quer deixar um comentário? Escreva aqui e escolha como enviar: pelo WhatsApp ou por e-mail.</p>
+  <form id="fbform" novalidate>
+    <label>Assunto<select name="tipo" id="fbtipo"></select></label>
+    <label>Mensagem<textarea name="mensagem" id="fbtext" required></textarea></label>
+    <div class="fbrow">
+      <label>Nome (opcional)<input name="nome" autocomplete="name"></label>
+      <label>E-mail para resposta (opcional)<input name="email" type="email" autocomplete="email"></label>
+    </div>
+    <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="fbbtns">
+      <button type="button" class="primary" data-via="wa">Enviar pelo WhatsApp</button>
+      <button type="button" data-via="mail">Enviar por e-mail</button>
+    </div>
+    <p class="fbmsg" id="fbmsg" role="status"></p>
+  </form>
+</section>
+
 <section id="fontes" class="sources">
-  <div class="head"><span class="num">10</span><h2>Todas as fontes</h2></div>
+  <div class="head"><span class="num">11</span><h2>Todas as fontes</h2></div>
   <ul>
     <li><a href="https://www.cnnbrasil.com.br/eleicoes/dados-tse-votacao-apos-prorrogacao/">CNN Brasil / setup.news</a>: 34.330 votos, faixas de horário, 1º turno, resultado.</li>
     <li><a href="https://www.mixvale.com.br/2026/10/26/eleicao-presidencial-de-2026-dados-do-tse-mostram-que-35-521-votos-foram-registrados-apos-as-17h-no-2o-turno/">Mixvale</a>: 35.521 votos (registros de 497.897 urnas).</li>
@@ -354,7 +403,29 @@ details p b { color: var(--fg); }
   var w = document.getElementById("waffle"), g = document.createDocumentFragment();
   [41, 44, 15].forEach(function (n, k) { for (var j = 0; j < n; j++) { var q = document.createElement("i"); q.className = "c" + (k + 1); g.appendChild(q); } });
   w.appendChild(g);
+  // feedback (mesmo mecanismo da pagina do Zelda: WhatsApp ou e-mail via formsubmit)
+  var f = document.getElementById("fbform"), msg = document.getElementById("fbmsg"), sel = document.getElementById("fbtipo"), ta = document.getElementById("fbtext");
+  var WA = "5515996666366", MAIL = "gebara.eng@gmail.com", TAG = "[Votos após as 17h] ";
+  ["Sugestão", "Erro ou problema", "Elogio", "Outro comentário"].forEach(function (x) { var o = document.createElement("option"); o.textContent = x; sel.appendChild(o); });
+  ta.placeholder = "Escreva aqui a sua mensagem...";
+  function data() { return { tipo: sel.value, mensagem: ta.value.trim(), nome: f.nome.value.trim(), email: f.email.value.trim(), honey: f._honey.value }; }
+  function text(d) { return TAG + d.tipo + "\n\n" + d.mensagem + (d.nome ? "\n\n- " + d.nome : "") + (d.email ? " (" + d.email + ")" : ""); }
+  f.addEventListener("click", function (e) {
+    var b = e.target.closest("button"), via = b && b.dataset.via; if (!via) return;
+    var d = data(); if (d.honey) return;
+    if (!d.mensagem) { msg.textContent = "Escreva a mensagem antes de enviar."; ta.focus(); return; }
+    if (via === "wa") { window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(text(d)), "_blank", "noopener"); msg.textContent = "Abrimos o WhatsApp com a mensagem pronta. É só tocar em enviar."; return; }
+    var btns = f.querySelectorAll("button"); btns.forEach(function (x) { x.disabled = true; }); msg.textContent = "Enviando...";
+    fetch("https://formsubmit.co/ajax/" + MAIL, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ _subject: TAG + d.tipo, _template: "table", _captcha: "false", assunto: d.tipo, mensagem: d.mensagem, nome: d.nome || "-", email: d.email || "-", pagina: location.href }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || String(j.success) === "false") throw new Error("fail"); }); })
+      .then(function () { msg.textContent = "Obrigado! Sua mensagem foi enviada."; ta.value = ""; })
+      .catch(function () { var a = document.createElement("a"); a.href = "mailto:" + MAIL + "?subject=" + encodeURIComponent(TAG + d.tipo) + "&body=" + encodeURIComponent(text(d)); a.textContent = "Abrir no seu app de e-mail"; msg.textContent = "Não deu para enviar daqui. "; msg.appendChild(a); })
+      .then(function () { btns.forEach(function (x) { x.disabled = false; }); });
+  });
 })();
 </script>
+<script data-goatcounter="https://votos-apos-17h.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
