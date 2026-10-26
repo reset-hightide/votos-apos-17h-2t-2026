@@ -12,7 +12,7 @@
 /* Layout: capa, resposta curta, seções numeradas (do fato ao resultado), glossário, perguntas, fontes e fechamento */
 :root {
   --bg: #f4f6f9; --surface: #ffffff; --fg: #1a1f29; --muted: #5c6575; --line: #dce1e9; --neutral: #eef1f5;
-  --accent: #2d5ea8; --accent2: #c0392b; --dot: #c4ccd9; --warn: #8a5a00; --warnbg: #fdf1d6;
+  --accent: #b7791f; --accent2: #b7791f; --lula: #c0392b; --flavio: #2d5ea8; --onacc: #ffffff; --dot: #c4ccd9; --warn: #8a5a00; --warnbg: #fdf1d6;
   --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --f-body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
   --f-data: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -21,7 +21,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #12151b; --surface: #1a1e26; --fg: #f1f3f7; --muted: #a3acbb; --line: #2c323d; --neutral: #232832;
-    --accent: #4e8fe6; --accent2: #f07a63; --dot: #3b4454; --warn: #f0c46a; --warnbg: #2e2713; color-scheme: dark;
+    --accent: #f0c46a; --accent2: #f0c46a; --lula: #f07a63; --flavio: #4e8fe6; --onacc: #12151b; --dot: #3b4454; --warn: #f0c46a; --warnbg: #2e2713; color-scheme: dark;
   }
 }
 * { box-sizing: border-box; }
@@ -34,7 +34,7 @@ h3 { font-size: 1.05rem; font-weight: 700; }
 p { margin: 0; }
 .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
 .eyebrow { font: 600 0.78rem var(--f-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.red { color: var(--accent2); } .acc { color: var(--accent); }
+.red { color: var(--accent2); } .acc { color: var(--accent); } .lula { color: var(--lula); } .flavio { color: var(--flavio); }
 
 /* capa e fechamento */
 .cover { min-height: 100vh; min-height: 100svh; display: grid; align-content: center; gap: 22px; padding: 56px 20px; position: relative; overflow: hidden; }
@@ -43,7 +43,7 @@ p { margin: 0; }
 .cover .big { font: 800 clamp(3.4rem, 15vw, 8rem)/0.95 var(--f-display); letter-spacing: -0.04em; color: var(--accent); }
 .cover p.lead { font-size: clamp(1.15rem, 2.6vw, 1.45rem); max-width: 40ch; color: var(--muted); }
 .cover p.lead b { color: var(--fg); }
-.scroll { display: inline-flex; align-items: center; gap: 10px; width: max-content; font: 700 1rem var(--f-display); color: #fff; background: var(--accent); text-decoration: none; padding: 14px 22px; border-radius: 999px; }
+.scroll { display: inline-flex; align-items: center; gap: 10px; width: max-content; font: 700 1rem var(--f-display); color: var(--onacc); background: var(--accent); text-decoration: none; padding: 14px 22px; border-radius: 999px; }
 .scroll:hover { filter: brightness(1.1); }
 .bounce { animation: b 1.6s ease-in-out infinite; display: inline-block; }
 @keyframes b { 50% { transform: translateY(4px); } }
@@ -60,7 +60,7 @@ section { display: grid; gap: 18px; scroll-margin-top: 16px; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
 .stat b { font: 800 clamp(2rem, 6vw, 2.8rem)/1 var(--f-display); }
 .stat span { color: var(--muted); font-size: 0.95rem; }
-.answer { background: var(--accent); color: #fff; border-radius: 14px; padding: 20px 22px; font: 700 1.2rem/1.35 var(--f-display); }
+.answer { background: var(--accent); color: var(--onacc); border-radius: 14px; padding: 20px 22px; font: 700 1.2rem/1.35 var(--f-display); }
 .note { background: var(--neutral); border-left: 4px solid var(--line); border-radius: 0 10px 10px 0; padding: 12px 16px; font-size: 0.95rem; display: grid; gap: 4px; }
 .note.warn { background: var(--warnbg); border-left-color: var(--warn); }
 .k { font: 600 0.7rem var(--f-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
@@ -87,6 +87,7 @@ section { display: grid; gap: 18px; scroll-margin-top: 16px; }
 .reasons { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .reasons li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; font-size: 0.98rem; }
 .reasons li::before { content: counter(r); counter-increment: r; font: 800 1.1rem var(--f-display); color: var(--accent); }
+.reasons.l li::before { color: var(--lula); } .reasons.f li::before { color: var(--flavio); }
 .reasons { counter-reset: r; }
 .reasons b { display: block; font-family: var(--f-display); }
 .reasons span { color: var(--muted); }
@@ -99,7 +100,7 @@ section { display: grid; gap: 18px; scroll-margin-top: 16px; }
 .waffle-box { display: grid; grid-template-columns: minmax(200px, 300px) 1fr; gap: 22px; align-items: center; }
 .waffle { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
 .waffle i { aspect-ratio: 1; border-radius: 3px; display: block; }
-.c1 { background: var(--accent2); } .c2 { background: var(--accent); } .c3 { background: var(--dot); }
+.c1 { background: var(--accent); } .c2 { background: var(--fg); } .c3 { background: var(--dot); }
 .legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .legend li { display: grid; grid-template-columns: 16px 1fr; gap: 10px; align-items: start; }
 .legend li > i { width: 16px; height: 16px; border-radius: 4px; margin-top: 7px; }
@@ -108,9 +109,9 @@ section { display: grid; gap: 18px; scroll-margin-top: 16px; }
 @media (max-width: 600px) { .waffle-box { grid-template-columns: 1fr; } }
 
 /* cenários */
-.bar { height: 22px; border-radius: 8px; background: var(--accent); }
+.bar { height: 22px; border-radius: 8px; background: var(--lula); }
 .scen { display: grid; gap: 6px; }
-.scen .v { font: 800 1.5rem var(--f-display); color: var(--accent); }
+.scen .v { font: 800 1.5rem var(--f-display); color: var(--lula); }
 
 /* escolas */
 table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
@@ -159,7 +160,7 @@ details p b { color: var(--fg); }
   <div class="answer">Pelos números publicados, não. Os votos tardios foram uma parcela minúscula do total.</div>
   <div class="cards">
     <div class="card stat"><b class="acc">~35 mil</b><span>pessoas votaram depois das 17h, cerca de 1 a cada 3.700 votos</span></div>
-    <div class="card stat"><b class="acc">~4,4 milhões</b><span>foi a diferença entre os candidatos (Lula 51,79% × Flávio Bolsonaro 48,21%)</span></div>
+    <div class="card stat"><b class="acc">~4,4 milhões</b><span>foi a diferença entre os candidatos (<b class="lula">Lula</b> 51,79% × <b class="flavio">Flávio Bolsonaro</b> 48,21%)</span></div>
     <div class="card stat"><b class="red">0,8%</b><span>é quanto os votos tardios representam dessa diferença</span></div>
   </div>
   <p class="plain">Em palavras simples: mesmo que todos esses votos fossem anulados, quem ganhou continuaria ganhando por mais de 4 milhões de votos. Mas isso não responde a tudo. Abaixo, o que sabemos, o que não sabemos e por quê.</p>
@@ -185,7 +186,7 @@ details p b { color: var(--fg); }
   <div class="head"><span class="num">02</span><h2>Quantos votaram depois das 17h?</h2></div>
   <p class="plain">Para enxergar o tamanho disso, imagine um <b>estádio com 100 mil eleitores</b>. Só cerca de <b class="red">27</b> deles votariam depois das 17h.</p>
   <div class="card">
-    <div class="stadium-tag">Cada ponto cinza = 10 pessoas que votaram no horário. Os <b>3 pontos vermelhos</b> (≈ 27 pessoas) votaram depois das 17h.</div>
+    <div class="stadium-tag">Cada ponto cinza = 10 pessoas que votaram no horário. Os <b>3 pontos amarelos</b> (≈ 27 pessoas) votaram depois das 17h.</div>
     <div class="stadium" id="stadium" role="img" aria-label="Estádio de 100 mil eleitores representado por 10 mil pontos; três pontos em destaque representam cerca de 27 pessoas que votaram depois das 17h"></div>
   </div>
   <p class="src">Conta: 34.330 votos após as 17h ÷ 127.854.658 votos no 2º turno = 0,027%, ou cerca de 27 em cada 100 mil. Fontes: <a href="https://www.cnnbrasil.com.br/eleicoes/dados-tse-votacao-apos-prorrogacao/">CNN Brasil / setup.news</a> · <a href="https://simnoticias.com.br/cnn-brasil/veja-quais-escolas-tiveram-mais-votos-apos-as-17h-no-2o-turno/">Sim Notícias / CNN</a> (total de votos).</p>
@@ -210,8 +211,8 @@ details p b { color: var(--fg); }
   <p class="plain">As duas campanhas pediram mais tempo, cada uma por razões diferentes. Aqui estão os argumentos de cada lado, como as reportagens os descrevem. <b>Esta página não julga quem tem razão.</b></p>
   <div class="two">
     <div class="card">
-      <span class="k">Campanha de Lula</span>
-      <ol class="reasons">
+      <span class="k lula">Campanha de Lula</span>
+      <ol class="reasons l">
         <li><div><b>Transporte público deficiente</b><span>Frota de ônibus reduzida e longa espera nos pontos.</span></div></li>
         <li><div><b>Pedido inicial: Bahia</b><span>Salvador, Feira de Santana e Lauro de Freitas. Uma fiscalização do TRE-BA achou menos de 50% da frota de dia útil rodando em Salvador.</span></div></li>
         <li><div><b>Pedido ampliado</b><span>SP, AL, PE, RR, PI, PB, PA, PR e RJ e, depois, o país inteiro.</span></div></li>
@@ -219,8 +220,8 @@ details p b { color: var(--fg); }
       </ol>
     </div>
     <div class="card">
-      <span class="k">Campanha de Flávio Bolsonaro</span>
-      <ol class="reasons">
+      <span class="k flavio">Campanha de Flávio Bolsonaro</span>
+      <ol class="reasons f">
         <li><div><b>Clima</b><span>Chuva intensa, alagamentos, vias interditadas e quedas de energia.</span></div></li>
         <li><div><b>Mudança de local de votação</b><span>3.745 eleitores de Curitiba e Guaratuba e 446 de Itapevi (SP) tiveram de votar em outro lugar.</span></div></li>
         <li><div><b>17 municípios</b><span>São Paulo (10), Paraná (2) e Santa Catarina (5).</span></div></li>
@@ -239,7 +240,7 @@ details p b { color: var(--fg); }
   <div class="head"><span class="num">04</span><h2>Votar depois das 17h é normal?</h2></div>
   <p class="plain">Em toda eleição existe uma regra: quem <b>já está no local às 17h</b> recebe uma senha e pode votar, mesmo depois do horário. Por isso sempre há votos depois das 17h, com ou sem prorrogação.</p>
   <div class="versus">
-    <div class="card"><span class="k">1º turno · sem prorrogação</span><div class="n acc">3.724.999</div><span class="src">votaram depois das 17h (1.993 depois das 18h e 11 depois das 19h)</span></div>
+    <div class="card"><span class="k">1º turno · sem prorrogação</span><div class="n">3.724.999</div><span class="src">votaram depois das 17h (1.993 depois das 18h e 11 depois das 19h)</span></div>
     <div class="card"><span class="k">2º turno · prorrogado até as 19h</span><div class="n red">34.330</div><span class="src">votaram depois das 17h (último voto às 19h06)</span></div>
   </div>
   <div class="note warn">
@@ -266,16 +267,16 @@ details p b { color: var(--fg); }
 
 <section id="resultado">
   <div class="head"><span class="num">06</span><h2>Isso muda o resultado?</h2></div>
-  <p class="plain">Vamos testar o pior cenário. Lula teve 51,79% e Flávio Bolsonaro 48,21%: diferença de cerca de <b>4,4 milhões</b> de votos.</p>
+  <p class="plain">Vamos testar o pior cenário. <b class="lula">Lula</b> teve 51,79% e <b class="flavio">Flávio Bolsonaro</b> 48,21%: diferença de cerca de <b>4,4 milhões</b> de votos.</p>
   <div class="card scen">
     <span class="k">Diferença real</span><div class="bar"></div><span class="v">~4,40 milhões</span>
   </div>
   <div class="card scen">
-    <span class="k">Cenário A · todos os ~35 mil votos tardios eram do vencedor e foram anulados</span>
+    <span class="k">Cenário A · todos os ~35 mil votos tardios eram do vencedor (<b class="lula">Lula</b>) e foram anulados</span>
     <div class="bar" style="width:99.2%"></div><span class="v">~4,36 milhões <small style="font:600 0.9rem var(--f-body);color:var(--muted)">e o vencedor segue vencendo</small></span>
   </div>
   <div class="card scen">
-    <span class="k">Cenário B · todos eram do perdedor</span>
+    <span class="k">Cenário B · todos eram do perdedor (<b class="flavio">Flávio</b>)</span>
     <p class="plain">Esses votos já estão contados. Anulá-los só <b>aumentaria</b> a diferença.</p>
   </div>
   <div class="answer">Para virar o resultado, seria preciso anular mais de 4,4 milhões de votos do vencedor. Os votos tardios são menos de 1% disso.</div>
